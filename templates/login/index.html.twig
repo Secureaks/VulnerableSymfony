@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+        <form class="login" action="{{ path('app_login') }}" method="post">
+            <label>
+                <input name="email" type="text" placeholder="Email">
+            </label>
+            <label>
+                <input name="password" type="password" placeholder="Password">
+            </label>
+            <button type="submit">Login</button>
+        </form>
+
+        {% include 'commons/messages.html.twig' %}
+
+{% endblock %}

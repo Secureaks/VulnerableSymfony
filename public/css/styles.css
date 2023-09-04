@@ -1,0 +1,151 @@
+header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+header h1 {
+    margin: 0;
+    padding: 0;
+}
+
+nav {
+    /* Position at the end of the flex container */
+    margin: 0 0 0 auto;
+    padding: 0;
+}
+
+nav ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+nav ul li {
+    display: inline-block;
+    margin-left: 40px;
+}
+
+nav ul li a {
+    color: #444;
+    font-size: 16px;
+    font-weight: 500;
+    text-decoration: none;
+    text-transform: uppercase;
+}
+
+nav ul li a:hover {
+    color: #444;
+    text-decoration: none;
+}
+
+.search {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.legal-content {
+    width: 100%;
+    height: 500px;
+    border: 0;
+}
+
+.login {
+    margin: 150px auto 50px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.message {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.flash {
+    margin: 20px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 300px;
+    padding: 10px;
+}
+
+.flash-error {
+    background-color: #fdd;
+    color: red;
+}
+
+.flash-success {
+    background-color: #dfd;
+    color: green;
+}
+
+.register {
+    margin: 50px auto 50px auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.avatar {
+    display: flex;
+    flex-direction: column;
+}
+
+.avatar img {
+    max-width: 200px;
+}
+
+.avatar form {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: row;
+}
+
+br {
+    margin: 5px 0;
+}
+
+.admin-users {
+    border-bottom: 1px solid #ccc;
+}
+
+.admin-add-user {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.admin-add-user form {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.add-comment {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.add-comment form {
+    margin: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.add-comment form textarea {
+    width: 600px;
+    height: 200px;
+    resize: none;
+}

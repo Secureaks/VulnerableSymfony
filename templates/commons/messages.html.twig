@@ -1,0 +1,16 @@
+{# read and display just one flash message type #}
+
+<div class="message">
+    {% for message in app.flashes('error') %}
+        <div class="flash flash-error">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    {# read and display just one flash message type #}
+    {% for message in app.flashes('success') %}
+        <div class="flash flash-success">
+            {{ message }}
+        </div>
+    {% endfor %}
+</div>

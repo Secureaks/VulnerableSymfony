@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}My Blog{% endblock %}
+
+{% block body %}
+<div class="">
+
+    {% include './commons/search.html.twig' %}
+
+    {% if search is defined %}
+        <p>Search results for "{{ search | raw }}"</p>
+    {% endif %}
+
+
+    <div class="articles">
+        {% for post in posts %}
+            <div class="article">
+                <h2>{{ post.title }}</h2>
+
+                {% if post.author is defined %}
+                    <p>By: {{ post.author.username }}</p>
+                {% endif %}
+
+                <p>Published on {{ post.date|date('d/m/Y') }}</p>
+
+                {% if post.img is not null %}
+                    <a href="{{ path('app_blog_post', {'post': post.id}) }}">
+                        <img src="{{ asset('img/posts/' ~ post.img) }}" alt="illustration"/>
+                    </a>
+                {% endif %}
+
+                <p>{{ post.content | nl2br | u.truncate(150, '...') }}</p>
+                <div class="back back-left">
+                    <a href="{{ path('app_blog_post', {'post': post.id}) }}">Read more</a>
+                </div>
+            </div>
+        {% endfor %}
+
+        {# if there is no post, display a message #}
+        {% if posts is empty %}
+            <p>No post found.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

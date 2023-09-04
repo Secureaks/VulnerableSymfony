@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+
+    <div class="register">
+        <h3>Create an account</h3>
+        <form method="post" action="{{ path('app_register') }}">
+            <label for="username">Username:</label>
+            <input id="username" type="text" name="username" required/>
+            <label for="email">Email:</label>
+            <input id="email" type="email" name="email" required/>
+            <label for="password">Password:</label>
+            <input id="password" type="password" name="password" required/>
+            <label for="confirmPassword">Confirm Password:</label>
+            <input id="confirmPassword" type="password" name="confirmPassword" required/>
+            <button type="submit">Register</button>
+        </form>
+
+        {% include 'commons/messages.html.twig' %}
+    </div>
+
+{% endblock %}

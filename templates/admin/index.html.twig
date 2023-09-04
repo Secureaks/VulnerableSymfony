@@ -1,0 +1,61 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Administration{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper">
+        <h2>Administration</h2>
+
+        {% include 'commons/messages.html.twig' %}
+
+        <div class="admin-add-user">
+            <h3>Add account</h3>
+            <form method="post" action="{{ path('app_admin_create') }}">
+                <label for="username">Username:</label>
+                <input id="username" type="text" name="username" required/>
+                <label for="email">Email:</label>
+                <input id="email" type="email" name="email" required/>
+                <label for="password">Password:</label>
+                <input id="password" type="password" name="password" required/>
+                <label for="role"></label>
+                    <select id="role" name="role">
+                        <option value="ROLE_USER">
+                            User
+                        </option>
+                        <option value="ROLE_ADMIN">
+                            Admin
+                        </option>
+                    </select>
+                <button type="submit">Create</button>
+            </form>
+        </div>
+
+        <div>
+            <h3>Users</h3>
+            {% for user in users %}
+                <div class="admin-users">
+                    <ul>
+                        <li>{{ user.username }}</li>
+                        <li>{{ user.email }}</li>
+                    </ul>
+                    <form action="{{ path('app_admin_role', { 'user': user.id }) }}" method="post">
+                        <label>
+                            <select name="role">
+                                <option {{ 'ROLE_ADMIN' not in user.roles ? 'selected' : '' }} value="ROLE_USER">
+                                    User
+                                </option>
+                                <option {{ 'ROLE_ADMIN' in user.roles ? 'selected' : '' }} value="ROLE_ADMIN">
+                                    Admin
+                                </option>
+                            </select>
+                        </label>
+                        <button type="submit">Change role</button>
+                    </form>
+                    <a href="{{ path('app_admin_delete', { 'user': user.id }) }}">Delete</a>
+                </div>
+            {% endfor %}
+        </div>
+
+    </div>
+{% endblock %}

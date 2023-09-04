@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Welcome!{% endblock %}</title>
+
+    {% block stylesheets %}
+        {#<link rel="stylesheet" href="/css/styles.css">#}
+
+        {% if user_pref.get() == 'dark' %}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/dark.css">
+        {% else %}
+            <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/light.css">
+        {% endif %}
+        <link rel="stylesheet" href="/css/styles.css">
+
+    {% endblock %}
+
+    {% block javascripts %}
+        {{ encore_entry_script_tags('app') }}
+    {% endblock %}
+</head>
+<body>
+<div>
+    <header>
+    <h1>My super Blog</h1>
+    <nav>
+        <ul>
+            <li><a href="{{ path('app_blog') }}">Home</a></li>
+            {% if is_granted('ROLE_ADMIN') %}
+                <li><a href="{{ path('app_admin') }}">Admin</a></li>
+            {% endif %}
+            {% if app.user %}
+                <li><a href="{{ path('app_user') }}">My account</a></li>
+                <li><a href="{{ path('app_logout') }}">Logout</a></li>
+            {% else %}
+                <li><a href="{{ path('app_login') }}">Login</a></li>
+                <li><a href="{{ path('app_register') }}">Register</a></li>
+            {% endif %}
+        </ul>
+    </nav>
+    </header>
+
+    <div class="container">
+        {% block body %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>My super Blog - {{ 'now'|date('Y') }}</p>
+        <a href="{{ path('app_legal') }}">Legal notice</a>
+    </footer>
+</div>
+</body>
+</html>

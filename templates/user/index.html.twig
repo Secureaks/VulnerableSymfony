@@ -1,0 +1,62 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper">
+        <h2>Hello {{ user.username }}</h2>
+
+        <ul>
+            <li>Username: {{ user.username }}</li>
+            <li>Email: {{ user.email }}</li>
+            <li>Roles: {{ 'ROLE_ADMIN' not in user.roles ? 'Admin' : 'User' }}</li>
+        </ul>
+
+        <div>
+            <h3>Change password</h3>
+            <form method="post" action="{{ path('app_user_password', { 'user': user.id }) }}">
+                <label for="newPassword">New password</label>
+                <input type="password" id="newPassword" name="newPassword" required/>
+                <label for="confirmPassword">Confirm password</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required/>
+                <button type="submit">Change password</button>
+            </form>
+            {% for label, messages in app.flashes(['passwordError', 'passwordSuccess']) %}
+                {% for message in messages %}
+                    <div class="flash-{{ passwordError ? 'error' : 'success' }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+        </div>
+
+        <div>
+            <h3>Change email</h3>
+            <form method="post" action="{{ path('app_user_email', { 'user': user.id }) }}">
+                <label for="newEmail">New email</label>
+                <input type="email" id="newEmail" name="newEmail" required/>
+                <button type="submit">Change email</button>
+            </form>
+        </div>
+
+        <div class="avatar">
+            <h3>Change avatar</h3>
+            {% if user.avatar is not null %}
+                <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="avatar"/>
+                <a href="{{ path('app_user_avatar_resize', {'user': user.id}) }}">Resize image to 200x200 px</a>
+                <a href="{{ path('app_user_avatar_delete', {'user': user.id}) }}">Remove</a>
+            {% endif %}
+            <form method="post" action="{{ path('app_user_avatar', { 'user': user.id }) }}"
+                  enctype="multipart/form-data">
+                <input type="file" id="avatar" name="avatar" required/>
+                <button type="submit">Change avatar</button>
+            </form>
+
+        </div>
+
+        {% include 'commons/messages.html.twig' %}
+
+    </div>
+
+{% endblock %}
