@@ -10,7 +10,7 @@
         <ul>
             <li>Username: {{ user.username }}</li>
             <li>Email: {{ user.email }}</li>
-            <li>Roles: {{ 'ROLE_ADMIN' not in user.roles ? 'Admin' : 'User' }}</li>
+            <li>Roles: {{ 'ROLE_ADMIN' in user.roles ? 'Admin' : 'User' }}</li>
         </ul>
 
         <div>
