@@ -76,12 +76,7 @@ class BlogInitCommand extends Command
             file_get_contents(__DIR__ . "/../../resources/comments/comment05.txt"),
         ];
 
-        $imgs = [
-            "img01.png",
-            "img02.png",
-            "img03.png",
-            "img04.png",
-        ];
+        $imgs = ['placeholder.png'];
 
         $postTitles = [
             "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
