@@ -45,10 +45,15 @@
         {% block body %}{% endblock %}
     </div>
 
+    <div id="float-message" style="display: none">
+    </div>
+
     <footer>
         <p>My super Blog - {{ 'now'|date('Y') }}</p>
         <a href="{{ path('app_legal') }}">Legal notice</a>
     </footer>
+
+    <script src="{{ asset('js/script.js') }}"></script>
 </div>
 </body>
 </html>
