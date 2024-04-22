@@ -8,7 +8,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class LoginController extends AbstractController
 {
@@ -104,9 +104,9 @@ class LoginController extends AbstractController
 
             $userRepository->save($user, true);
 
-            $this->addFlash('success', 'User created successfully, please log in');
-
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToRoute('app_login', [
+                'message' => 'User created successfully, please log in'
+            ]);
         }
 
         return $this->render('login/register.html.twig', []);

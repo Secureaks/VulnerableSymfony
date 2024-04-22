@@ -7,7 +7,7 @@ use App\Repository\UserRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Routing\Attribute\Route;
 
 class UserController extends AbstractController
 {
@@ -19,6 +19,9 @@ class UserController extends AbstractController
         ]);
     }
 
+    /**
+     * #VULNERABILITY: Intended vulnerable request (Missing right control and privilege escalation)
+     */
     #[Route('/user/password/{user}', name: 'app_user_password', methods: ['POST'])]
     public function changePassword(User $user, Request $request, UserRepository $userRepository): Response
     {
@@ -43,6 +46,9 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user');
     }
 
+    /**
+     * #VULNERABILITY: Intended vulnerable request (Missing right control leading to privilege escalation)
+     */
     #[Route('/user/email/{user}', name: 'app_user_email', methods: ['POST'])]
     public function changeEmail(User $user, Request $request, UserRepository $userRepository): Response
     {
