@@ -48,7 +48,7 @@ class BlogInitCommand extends Command
         $adminUser = new User();
         $adminUser->setUsername("admin");
         $adminUser->setEmail("admin@admin.com");
-        $adminUser->setPassword(md5("admin"));
+        $adminUser->setPassword(md5("P@ssw0rd07"));
         $adminUser->setRoles(["ROLE_ADMIN", "ROLE_USER"]);
         $this->entityManager->persist($adminUser);
 
