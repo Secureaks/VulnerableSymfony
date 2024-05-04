@@ -90,11 +90,11 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user');
         }
 
-        // Check the MIME type of the file
-        if (!in_array($avatar->getMimeType(), ['image/jpeg', 'image/png'])) {
+        // Check the MIME type of the file (Intended vulnerable)
+/*        if (!in_array($avatar->getMimeType(), ['image/jpeg', 'image/png'])) {
             $this->addFlash('error', 'Avatar must be a JPEG or PNG image');
             return $this->redirectToRoute('app_user');
-        }
+        }*/
 
         // If the avatar directory does not exist, create it
         if (!file_exists($this->getParameter('avatars_directory'))) {
