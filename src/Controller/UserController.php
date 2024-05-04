@@ -90,6 +90,14 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user');
         }
 
+        // Check the file extension
+/*        $allowedExtensions = ['jpg', 'jpeg', 'png'];
+        $extension = pathinfo($avatar->getClientOriginalName(), PATHINFO_EXTENSION);
+        if (!in_array($extension, $allowedExtensions)) {
+            $this->addFlash('error', 'Avatar must be a JPEG or PNG image');
+            return $this->redirectToRoute('app_user');
+        }*/
+
         // Check the MIME type of the file (Intended vulnerable)
 /*        if (!in_array($avatar->getMimeType(), ['image/jpeg', 'image/png'])) {
             $this->addFlash('error', 'Avatar must be a JPEG or PNG image');
