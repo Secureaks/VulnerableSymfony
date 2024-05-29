@@ -5,10 +5,10 @@
 {% block body %}
 <div class="">
 
-    {% include './commons/search.html.twig' %}
+    {% include '/commons/search.html.twig' %}
 
     {% if search is defined %}
-        <p>Search results for "{{ search }}"</p>
+        <p>Search results for "{{ search | raw }}"</p>
     {% endif %}
 
 

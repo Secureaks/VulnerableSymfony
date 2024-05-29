@@ -6,6 +6,7 @@ use App\Entity\Comment;
 use App\Entity\Post;
 use App\Repository\CommentRepository;
 use App\Repository\PostRepository;
+use App\Services\Analytics;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,17 +14,25 @@ use Symfony\Component\Routing\Attribute\Route;
 
 class BlogController extends AbstractController
 {
+    /**
+     * #VULNERABILITY: Intended vulnerable request (SSRF + RCE in the referer header through the track method of the Analytics service)
+     */
     #[Route('/', name: 'app_blog')]
-    public function index(PostRepository $postRepository): Response
+    public function index(PostRepository $postRepository, Analytics $analytics): Response
     {
+        $analytics->track();
         return $this->render('blog/index.html.twig', [
             'posts' => $postRepository->findAllOrdered(),
         ]);
     }
 
+    /**
+     * #VULNERABILITY: Intended vulnerable request (SSRF + RCE in the referer header through the track method of the Analytics service)
+     */
     #[Route('/post/{post}', name: 'app_blog_post')]
-    public function post(Post $post, CommentRepository $commentRepository): Response
+    public function post(Post $post, CommentRepository $commentRepository, Analytics $analytics): Response
     {
+        $analytics->track();
         return $this->render('blog/post.html.twig', [
             'post' => $post,
             'comments' => $commentRepository->findByPostOrdered($post->getId()),
