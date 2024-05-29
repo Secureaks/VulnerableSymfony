@@ -4,18 +4,22 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Repository\UserRepository;
+use App\Services\Avatar;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
 class UserController extends AbstractController
 {
     #[Route('/user', name: 'app_user')]
-    public function index(): Response
+    public function index(
+        #[CurrentUser] ?User $user,
+    ): Response
     {
         return $this->render('user/index.html.twig', [
-            'user' => $this->getUser(),
+            'user' => $user,
         ]);
     }
 
@@ -90,19 +94,6 @@ class UserController extends AbstractController
             return $this->redirectToRoute('app_user');
         }
 
-        // Check the file extension
-/*        $allowedExtensions = ['jpg', 'jpeg', 'png'];
-        $extension = pathinfo($avatar->getClientOriginalName(), PATHINFO_EXTENSION);
-        if (!in_array($extension, $allowedExtensions)) {
-            $this->addFlash('error', 'Avatar must be a JPEG or PNG image');
-            return $this->redirectToRoute('app_user');
-        }*/
-
-        // Check the MIME type of the file (Intended vulnerable)
-/*        if (!in_array($avatar->getMimeType(), ['image/jpeg', 'image/png'])) {
-            $this->addFlash('error', 'Avatar must be a JPEG or PNG image');
-            return $this->redirectToRoute('app_user');
-        }*/
 
         // If the avatar directory does not exist, create it
         if (!file_exists($this->getParameter('avatars_directory'))) {
@@ -111,6 +102,47 @@ class UserController extends AbstractController
 
         $avatarName = md5(uniqid()) . '.' . $avatar->getClientOriginalExtension();
         $avatar->move($this->getParameter('avatars_directory'), $avatarName);
+
+        $user->setAvatar($avatarName);
+        $userRepository->save($user, true);
+
+        $this->addFlash('success', 'Avatar changed successfully');
+        return $this->redirectToRoute('app_user');
+    }
+
+    // Get the avatar from an URL
+    /**
+     * #VULNERABILITY: Intended vulnerable request (SSRF - Server Side Request Forgery)
+     */
+    #[Route('/user/avatar/url/{user}', name: 'app_user_url_avatar', methods: ['POST'])]
+    public function getAvatarFromUrl(
+        Request $request,
+        UserRepository $userRepository,
+        User $user,
+        Avatar $avatarService
+    ): Response {
+        if ($user !== $this->getUser()) {
+            $this->addFlash('error', 'You cannot change other users avatar');
+            return $this->redirectToRoute('app_user');
+        }
+
+        $url = $request->get('url');
+
+        if (empty($url)) {
+            $this->addFlash('error', 'URL cannot be empty');
+            return $this->redirectToRoute('app_user');
+        }
+        // Get the content of the URL
+        $content = $avatarService->getFromUrl($url);
+
+        if ($content === false) {
+            $this->addFlash('error', 'URL is not valid or cannot be reached');
+            return $this->redirectToRoute('app_user');
+        }
+
+        // Get the file extension
+        $avatarName = md5(uniqid()) . '.png';
+        file_put_contents($this->getParameter('avatars_directory') . '/' . $avatarName, $content);
 
         $user->setAvatar($avatarName);
         $userRepository->save($user, true);

@@ -42,15 +42,25 @@
 
         <div class="avatar">
             <h3>Change avatar</h3>
+
             {% if user.avatar is not null %}
                 <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}" alt="avatar"/>
                 <a href="{{ path('app_user_avatar_resize', {'user': user.id}) }}">Resize image to 200x200 px</a>
                 <a href="{{ path('app_user_avatar_delete', {'user': user.id}) }}">Remove</a>
             {% endif %}
+
+            <h4>Upload a new image file:</h4>
             <form method="post" action="{{ path('app_user_avatar', { 'user': user.id }) }}"
                   enctype="multipart/form-data">
                 <input type="file" id="avatar" name="avatar" required/>
                 <button type="submit">Change avatar</button>
+            </form>
+
+            <h4>Get the image file from a URL:</h4>
+            <form method="post" action="{{ path('app_user_url_avatar', { 'user': user.id }) }}"
+                  enctype="multipart/form-data">
+                <input type="text" id="url" name="url" required placeholder="https://example.com/image.png"/>
+                <button type="submit">Get avatar</button>
             </form>
 
         </div>
