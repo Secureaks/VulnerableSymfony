@@ -12,6 +12,9 @@ class Analytics
     {
     }
 
+    /**
+     * #VULNERABILITY: Intended vulnerable request (SSRF + RCE in the referer header)
+     */
     public function track(): void {
         // Get the referer header
         $referer = $_SERVER['HTTP_REFERER'] ?? null;
