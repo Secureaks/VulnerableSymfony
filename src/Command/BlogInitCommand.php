@@ -25,6 +25,19 @@ class BlogInitCommand extends Command
     private EntityManagerInterface $entityManager;
     private UserPasswordHasherInterface $passwordHasher;
 
+    private array $imageList = [
+        'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
+        'https://fastly.picsum.photos/id/20/3670/2462.jpg?hmac=CmQ0ln-k5ZqkdtLvVO23LjVAEabZQx2wOaT4pyeG10I',
+        'https://fastly.picsum.photos/id/26/4209/2769.jpg?hmac=vcInmowFvPCyKGtV7Vfh7zWcA_Z0kStrPDW3ppP0iGI',
+        'https://fastly.picsum.photos/id/43/1280/831.jpg?hmac=glK-rQ0ppFClW-lvjk9FqEWKog07XkOxJf6Xg_cU9LI',
+        'https://fastly.picsum.photos/id/58/1280/853.jpg?hmac=YO3QnOm9TpyM5DqsJjoM4CHg8oIq4cMWLpd9ALoP908',
+        'https://fastly.picsum.photos/id/54/3264/2176.jpg?hmac=blh020fMeJ5Ru0p-fmXUaOAeYnxpOPHnhJojpzPLN3g',
+        'https://fastly.picsum.photos/id/60/1920/1200.jpg?hmac=fAMNjl4E_sG_WNUjdU39Kald5QAHQMh-_-TsIbbeDNI',
+        'https://fastly.picsum.photos/id/76/4912/3264.jpg?hmac=VkFcSa2Rbv0R0ndYnz_FAmw02ON1pPVjuF_iVKbiiV8',
+        'https://fastly.picsum.photos/id/84/1280/848.jpg?hmac=YFRYDI4UsfbeTzI8ZakNOR98wVU7a-9a2tGF542539s',
+        'https://fastly.picsum.photos/id/122/4147/2756.jpg?hmac=-B_1uAvYufznhjeA9xSSAJjqt07XrVzDWCf5VDNX0pQ',
+    ];
+
     public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, string $name = null)
     {
         parent::__construct($name);
@@ -76,13 +89,13 @@ class BlogInitCommand extends Command
             file_get_contents(__DIR__ . "/../../resources/comments/comment05.txt"),
         ];
 
-        $imgs = ['placeholder.png'];
+
 
         $postTitles = [
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
-            "Nullam euismod, nisl eget aliquam ultricies, nunc nunc aliquet nunc, vitae al iquam.",
-            "Sed euismod, nisl eget aliquam ultricies, nunc nunc aliquet nunc, vitae al iquam.",
-            "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+            "Harnessing the Cloud: Innovations in Remote Work Technology",
+            "Green Thumbs Up: The Rise of Urban Gardening in 2024",
+            "Echoes of the Past: How Historical Fiction Influences Modern Culture",
+            "Silicon Valley Skirmishes: Inside the Competitive Tech Startup Scene",
         ];
 
         // Create blog posts
@@ -92,7 +105,7 @@ class BlogInitCommand extends Command
 
             $content = $postContents[rand(0, count($postContents) - 1)];
             $title = $postTitles[rand(0, count($postTitles) - 1)];
-            $img = $imgs[rand(0, count($imgs) - 1)];
+            $img = $this->getNextImage($i);
 
             // Random datetime between now and 1 year ago
             $date = new \DateTime();
@@ -126,5 +139,9 @@ class BlogInitCommand extends Command
         $io->success('Application has been initialized');
 
         return Command::SUCCESS;
+    }
+
+    private function getNextImage(int $index): string {
+        return $this->imageList[$index % count($this->imageList)];
     }
 }

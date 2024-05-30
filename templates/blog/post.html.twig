@@ -5,7 +5,7 @@
 {% block body %}
     <div class="">
 
-        {% include './commons/search.html.twig' %}
+        {% include '/commons/search.html.twig' %}
 
         <div class="articles">
             <div class="article">
@@ -14,7 +14,7 @@
                 <p>Published on {{ post.date|date('d/m/Y') }}</p>
 
                 {% if post.img is not null %}
-                    <img src="{{ asset('img/posts/' ~ post.img) }}" alt="illustration"/>
+                    <img src="{{ post.img }}" alt="illustration"/>
                 {% endif %}
 
                 <p>{{ post.content | nl2br }}</p>
