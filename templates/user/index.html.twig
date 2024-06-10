@@ -14,6 +14,15 @@
         </ul>
 
         <div>
+            <h3>Change about me</h3>
+            <form method="post" action="{{ path('app_user_about') }}">
+                <label for="about">About me</label>
+                <textarea id="about" name="about">{{ user.aboutMe }}</textarea>
+                <button type="submit">Save</button>
+            </form>
+        </div>
+
+        <div>
             <h3>Change password</h3>
             <form method="post" action="{{ path('app_user_password', { 'user': user.id }) }}">
                 <label for="newPassword">New password</label>

@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\User;
 use App\Repository\UserRepository;
 use App\Services\Avatar;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -70,7 +71,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user');
     }
 
-    // Avatar upload
     /**
      * #VULNERABILITY: Intended vulnerable request (File Upload - No extension check)
      */
@@ -110,7 +110,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user');
     }
 
-    // Get the avatar from an URL
     /**
      * #VULNERABILITY: Intended vulnerable request (SSRF - Server Side Request Forgery)
      */
@@ -151,7 +150,6 @@ class UserController extends AbstractController
         return $this->redirectToRoute('app_user');
     }
 
-    // Delete the avatar
     /**
      * #VULNERABILITY: Intended vulnerable request (Missing right control)
      */
@@ -171,8 +169,6 @@ class UserController extends AbstractController
         $this->addFlash('success', 'Avatar deleted successfully');
         return $this->redirectToRoute('app_user');
     }
-
-    // Resize the avatar image
 
     /**
      *  #VULNERABILITY: Intended vulnerable request (Command injection)
@@ -204,6 +200,26 @@ class UserController extends AbstractController
         shell_exec($command);
 
         $this->addFlash('success', 'Avatar resized successfully');
+        return $this->redirectToRoute('app_user');
+    }
+
+    /**
+     *  #VULNERABILITY: Intended vulnerable request (SSTI)
+     *
+     * Payload example: {{'/etc/passwd'|file_excerpt(1,30)}}
+     */
+    #[Route('/user/about/', name: 'app_user_about', methods: ['POST'])]
+    public function about(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        #[CurrentUser] ?User $user
+    ): Response
+    {
+        $about = $request->get('about');
+        $user->setAboutMe($about);
+        $entityManager->flush();
+
+        $this->addFlash('success', 'About changed successfully');
         return $this->redirectToRoute('app_user');
     }
 }

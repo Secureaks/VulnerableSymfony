@@ -33,6 +33,9 @@
                         <img src="{{ asset('uploads/avatars/' ~ comment.author.avatar) }}" alt="avatar"/>
                     {% endif %}
                     <h4>{{ comment.author.username }}</h4>
+                    {% if comment.author.aboutMe is not null and comment.author.aboutMe != '' %}
+                        <p class="about-me">{{ template_from_string(comment.author.aboutMe) }}</p>
+                    {% endif %}
                     <p>Published on {{ comment.date|date('d/m/Y') }}</p>
                     <p>{{ comment.content | raw }}</p>
                 </div>

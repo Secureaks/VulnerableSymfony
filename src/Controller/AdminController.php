@@ -72,7 +72,6 @@ class AdminController extends AbstractController
     #[Route('/admin/create', name: 'app_admin_create')]
     public function createUser(UserRepository $userRepository, Request $request): Response
     {
-
         $availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
 
         $email = $request->get('email');

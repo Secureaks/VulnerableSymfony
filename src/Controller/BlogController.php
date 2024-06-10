@@ -76,14 +76,12 @@ class BlogController extends AbstractController
         ]);
     }
 
-    // Legal page
     #[Route('/legal', name: 'app_legal')]
     public function legal(): Response
     {
         return $this->render('blog/legal.html.twig');
     }
 
-    // Legal content
     /**
      * #VULNERABILITY: Intended vulnerable request (File Inclusion)
      */

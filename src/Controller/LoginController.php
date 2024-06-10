@@ -52,6 +52,9 @@ class LoginController extends AbstractController
         // controller can be blank: it will never be called!
     }
 
+    /**
+     * #VULNERABILITY: User enumeration
+     */
     #[Route('/register', name: 'app_register', methods: ['GET', 'POST'])]
     public function register(Request $request, UserRepository $userRepository): Response
     {

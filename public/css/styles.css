@@ -114,6 +114,10 @@ nav ul li a:hover {
     max-width: 200px;
 }
 
+.comment img {
+    max-width: 50px;
+}
+
 .avatar form {
     margin: 20px 0;
     display: flex;
@@ -160,4 +164,10 @@ br {
     width: 600px;
     height: 200px;
     resize: none;
+}
+
+.about-me {
+    font-size: 12px;
+    color: #666;
+    font-style: italic;
 }

@@ -7,6 +7,7 @@ use Psr\Log\LoggerInterface;
 class Analytics
 {
     public function __construct(
+        private readonly bool $trackingEnabled,
         private readonly LoggerInterface $logger
     )
     {
@@ -16,6 +17,10 @@ class Analytics
      * #VULNERABILITY: Intended vulnerable request (SSRF + RCE in the referer header)
      */
     public function track(): void {
+        if (!$this->trackingEnabled) {
+            return;
+        }
+
         // Get the referer header
         $referer = $_SERVER['HTTP_REFERER'] ?? null;
         if (!$referer || !$this->validate($referer)) {

@@ -29,3 +29,11 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    App\Services\Analytics:
+        arguments:
+            $trackingEnabled: '%env(bool:TRACKING_ENABLED)%'
+
+    App\Twig\TemplateFromStringExtension:
+        tags:
+            - { name: twig.extension }
