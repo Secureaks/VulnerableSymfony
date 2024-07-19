@@ -4,6 +4,12 @@ This is a vulnerable Symfony application. It is intended to be used for security
 
 ## Installation
 
+### Install the dependencies
+
+```bash
+apt install php-xml
+```
+
 ### Clone the repository
 
 ```bash
