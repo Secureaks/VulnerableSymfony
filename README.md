@@ -11,6 +11,13 @@ git clone https://github.com/Secureaks/VulnerableSymfony.git
 cd VulnerableSymfony
 ```
 
+### Set the environment variables
+
+```bash
+cp .env .env.local
+nano .env.local
+```
+
 ## Usage in development
 
 ### Deploy the application
