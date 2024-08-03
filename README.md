@@ -1,89 +1,94 @@
 # Intended Vulnerable Symfony
 
-This is a vulnerable Symfony application. It is intended to be used for security training purposes.
+> [!CAUTION]
+> This application is intended to be vulnerable. Do not deploy it in a public environment.
 
-## Installation
+This project is a vulnerable Symfony application intended to be used for security training purposes. The list of 
+vulnerabilities is available below in the [List of vulnerabilities](#list-of-vulnerabilities) section.
 
-### Install the dependencies
+## Deployment
+
+### Public Docker image
+
+The easiest way to deploy the application is to use the public Docker image.
 
 ```bash
-apt install php-xml
+docker run -d --name VulenrableSymfony -p 8000:80 secureaks/vulnerablesymfony:latest
 ```
 
-### Clone the repository
+The application will be available at [http://localhost:8000](http://localhost:8000).
+
+### Build the Docker image manually
+
+You can build the Docker image manually, for example to customize the application.
+
+First, clone the repository:
 
 ```bash
 git clone https://github.com/Secureaks/VulnerableSymfony.git
 cd VulnerableSymfony
 ```
 
-### Set the environment variables
+Then build and run the Docker image:
+
+```bash
+docker buildx build --platform linux/amd64 -t secureaks/vulenrablesymfony:latest . --progress=plain
+docker run -d --name vulenrablesymfony -p 8000:80 secureaks/vulenrablesymfony:latest
+```
+
+The application will be available at [http://localhost:8000](http://localhost:8000).
+
+### Manual installation on Linux
+
+If you prefer to install the application manually (without building a Docker image), you can follow the instructions below.
+
+This guide is based on Ubuntu 22.04. For other distributions, you will need to adapt the commands.
+
+#### Install the dependencies
+
+```bash
+apt install php-xml php-intl php-curl php-mbstring php-mysql php-sqlite3 php-zip php-gd php-imagick
+```
+
+#### Clone the repository
+
+```bash
+git clone https://github.com/Secureaks/VulnerableSymfony.git
+cd VulnerableSymfony
+```
+
+#### Set the environment variables
 
 ```bash
 cp .env .env.local
 nano .env.local
 ```
 
-## Usage in development
-
-### Deploy the application
+#### Run the following commands
 
 ```bash
-bash deploy.sh $(whoami) dev
+composer install
+php bin/console doctrine:database:create # May be optional if the database already exists
+php bin/console doctrine:schema:update --force
+php bin/console blog:init 15
 ```
 
-### Start the dev server
+#### Start the dev server
 
 ```bash
 symfony serve
 ```
 
-Or
+Or:
 
 ```bash
 php -S 0.0.0.0:8000 -t public
 ```
 
-## Usage in production
-
-### Deploy the application
-
-```bash
-bash deploy.sh <web_user> prod
-```
-
-Exemple :
-
-```bash
-bash deploy.sh www-data prod
-```
-
-### Setup the web server vhost (example with Apache)
-
-```bash
-nano /etc/apache2/sites-available/vulnerable-symfony.conf
-```
-
-```apache
-<VirtualHost *:80>
-    ServerName vulnerable-symfony.local
-    DocumentRoot /var/www/VulnerableSymfony/public
-
-    <Directory /var/www/VulnerableSymfony/public>
-        AllowOverride All
-        Require all granted
-        DirectoryIndex index.php
-        Options +Indexes
-    </Directory>
-</VirtualHost>
-```
-
-```bash
-a2ensite vulnerable-symfony
-systemctl reload apache2
-```
-
 ## List of vulnerabilities
+
+You can find below the list of vulnerabilities available in the application. The source code is also documented to allow
+you to understand how the vulnerabilities are implemented.
 
 - Server Side Request Forgery and Remote Code Execution in the referer header on `/` and `/post/{post}`
 - Stored XSS on comment parameter on `/post/{post}/comment`
@@ -103,3 +108,33 @@ systemctl reload apache2
 - Sensitive endpoint intended to be used through SSRF on `/local`
 - Technical information disclosure on `/info.php`
 - Directory listing if using the option `Options +Indexes` on the vhost configuration
+
+## Credits
+
+This project is provided by [Secureaks](https://secureaks.com).
+
+## Contributing
+
+If you want to contribute to this project, fill free to open an issue or a pull request with your changes.
+
+## License
+
+This project is licensed under the ATTRIBUTION-NONCOMMERCIAL-SHAREALIKE 4.0 INTERNATIONAL (CC BY-NC-SA 4.0) license. 
+
+You are free to:
+
+- Share — copy and redistribute the material in any medium or format
+- Adapt — remix, transform, and build upon the material
+
+The licensor cannot revoke these freedoms as long as you follow the license terms.
+
+Under the following terms:
+
+- Attribution — You must give appropriate credit , provide a link to the license, and indicate if changes were made . You may do so in any reasonable manner, but not in any way that suggests the licensor endorses you or your use.
+- NonCommercial — You may not use the material for commercial purposes .
+- ShareAlike — If you remix, transform, or build upon the material, you must distribute your contributions under the same license as the original.
+
+No additional restrictions — You may not apply legal terms or technological measures that legally restrict others from doing anything the license permits.
+
+See the [LICENSE](LICENSE) file for details.
+
