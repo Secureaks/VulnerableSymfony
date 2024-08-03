@@ -32,8 +32,8 @@ cd VulnerableSymfony
 Then build and run the Docker image:
 
 ```bash
-docker buildx build --platform linux/amd64 -t secureaks/vulenrablesymfony:latest . --progress=plain
-docker run -d --name vulenrablesymfony -p 8000:80 secureaks/vulenrablesymfony:latest
+docker buildx build --platform linux/amd64 -t secureaks/vulnerablesymfony:latest . --progress=plain
+docker run -d --name vulenrablesymfony -p 8000:80 secureaks/vulnerablesymfony:latest
 ```
 
 The application will be available at [http://localhost:8000](http://localhost:8000).
