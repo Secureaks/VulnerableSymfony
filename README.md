@@ -6,6 +6,8 @@
 This project is a vulnerable Symfony application intended to be used for security training purposes. The list of 
 vulnerabilities is available below in the [List of vulnerabilities](#list-of-vulnerabilities) section.
 
+![Screensho](resources/screenshot.png)
+
 ## Deployment
 
 ### Public Docker image
