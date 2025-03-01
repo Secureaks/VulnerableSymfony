@@ -5,15 +5,17 @@ namespace App\Command;
 use App\Entity\Comment;
 use App\Entity\Post;
 use App\Entity\User;
+use App\Repository\CommentRepository;
+use App\Repository\PostRepository;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
+use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 #[AsCommand(
     name: 'blog:init',
@@ -22,8 +24,6 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 class BlogInitCommand extends Command
 {
     private string $appEnv;
-    private EntityManagerInterface $entityManager;
-    private UserPasswordHasherInterface $passwordHasher;
 
     private array $imageList = [
         'https://fastly.picsum.photos/id/1/5000/3333.jpg?hmac=Asv2DU3rA_5D1xSe22xZK47WEAN0wjWeFOhzd13ujW4',
@@ -38,11 +38,14 @@ class BlogInitCommand extends Command
         'https://fastly.picsum.photos/id/122/4147/2756.jpg?hmac=-B_1uAvYufznhjeA9xSSAJjqt07XrVzDWCf5VDNX0pQ',
     ];
 
-    public function __construct(EntityManagerInterface $entityManager, UserPasswordHasherInterface $passwordHasher, string $name = null)
-    {
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private CommentRepository $commentRepository,
+        private PostRepository $postRepository,
+        private UserRepository $userRepository,
+        string $name = null
+    ) {
         parent::__construct($name);
-        $this->entityManager = $entityManager;
-        $this->passwordHasher = $passwordHasher;
     }
 
     protected function configure(): void
@@ -56,20 +59,48 @@ class BlogInitCommand extends Command
     {
         $io = new SymfonyStyle($input, $output);
 
+        $io->info('Initializing the blog...');
+
+        if (!$this->isDatabaseEmpty()) {
+            $io->warning('Database is not empty.');
+            $validation = $io->ask("Do you want to clear the database?", "no", function ($answer) {;
+                if (!in_array($answer, ["yes", "no"])) {
+                    throw new \RuntimeException("You must answer yes or no");
+                }
+                return $answer;
+            });
+
+            if ($validation !== "yes") {
+                $io->warning("Operation aborted.");
+                return Command::FAILURE;
+            }
+
+            $io->info("Clearing the database...");
+            // Call the clear command
+            $command = $this->getApplication()->find('blog:clear');
+            $command->run(new ArrayInput(['force' => true]), $output);
+        }
+
         $count = $input->getArgument('count');
 
         $adminUser = new User();
         $adminUser->setUsername("admin");
+        $adminUser->setFirstname("Admin");
+        $adminUser->setLastname("Admin");
         $adminUser->setEmail("admin@admin.com");
         $adminUser->setPassword(md5("P@ssw0rd07"));
         $adminUser->setRoles(["ROLE_ADMIN", "ROLE_USER"]);
+        $adminUser->setAdmin(true);
         $this->entityManager->persist($adminUser);
 
         $normalUser = new User();
         $normalUser->setUsername("user");
+        $normalUser->setFirstname("User");
+        $normalUser->setLastname("User");
         $normalUser->setEmail("user@user.com");
         $normalUser->setPassword(md5("user"));
         $normalUser->setRoles(["ROLE_USER"]);
+        $normalUser->setAdmin(false);
         $this->entityManager->persist($normalUser);
 
         $this->entityManager->flush();
@@ -88,8 +119,6 @@ class BlogInitCommand extends Command
             file_get_contents(__DIR__ . "/../../resources/comments/comment04.txt"),
             file_get_contents(__DIR__ . "/../../resources/comments/comment05.txt"),
         ];
-
-
 
         $postTitles = [
             "Harnessing the Cloud: Innovations in Remote Work Technology",
@@ -143,5 +172,13 @@ class BlogInitCommand extends Command
 
     private function getNextImage(int $index): string {
         return $this->imageList[$index % count($this->imageList)];
+    }
+
+    private function isDatabaseEmpty(): bool {
+        $count = $this->userRepository->total();
+        $count += $this->postRepository->total();
+        $count += $this->commentRepository->total();
+
+        return $count === 0;
     }
 }

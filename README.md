@@ -98,7 +98,7 @@ you to understand how the vulnerabilities are implemented.
 - User enumeration on `/register`
 - Missing right control on `/user/role/{user}`
 - Missing right control on `/user/delete/{user}`
-- Missing right control and privilege escalation on `/user/password/{user}`
+- Missing right control on `/user/password/{user}`
 - Missing right control leading to privilege escalation on `/user/email/{user}`
 - File Upload - No extension check on `/user/avatar/{user}`
 - Server Side Request Forgery on the `url` parameter on `/user/avatar/url/{user}`
@@ -108,6 +108,7 @@ you to understand how the vulnerabilities are implemented.
 - Sensitive endpoint intended to be used through SSRF on `/local`
 - Technical information disclosure on `/info.php`
 - Directory listing if using the option `Options +Indexes` on the vhost configuration
+- Mass assignment on `/user/edit/` leading to privilege escalation
 
 ## Credits
 

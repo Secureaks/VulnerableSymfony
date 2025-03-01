@@ -28,18 +28,8 @@ class AdminController extends AbstractController
     #[Route('/user/role/{user}', name: 'app_admin_role', methods: ['POST'])]
     public function changeRole(Request $request, UserRepository $userRepository, User $user): Response
     {
-        $availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
-        $requestedRole = $request->get('role');
-
-        if (empty($requestedRole) || !in_array($requestedRole, $availableRoles)) {
-            $this->addFlash('error', 'Role is not valid');
-            return $this->redirectToRoute('app_admin');
-        }
-
-        $role = $requestedRole === 'ROLE_USER' ? ['ROLE_USER'] : ['ROLE_USER', 'ROLE_ADMIN'];
-
         $user = $userRepository->find($user);
-        $user->setRoles($role);
+        $user->setAdmin($request->get('role') === '1');
         $userRepository->save($user, true);
 
         $this->addFlash('success', 'Role changed successfully');
@@ -72,17 +62,12 @@ class AdminController extends AbstractController
     #[Route('/admin/create', name: 'app_admin_create')]
     public function createUser(UserRepository $userRepository, Request $request): Response
     {
-        $availableRoles = ['ROLE_USER', 'ROLE_ADMIN'];
-
         $email = $request->get('email');
         $username = $request->get('username');
         $password = $request->get('password');
-        $requestedRole = $request->get('role');
-
-        if (empty($requestedRole) || !in_array($requestedRole, $availableRoles)) {
-            $this->addFlash('error', 'Role is not valid');
-            return $this->redirectToRoute('app_admin');
-        }
+        $firstname = $request->get('firstname');
+        $lastname = $request->get('lastname');
+        $isAdmin = $request->get('role') === '1';
 
         // Check if email is valid and not already in use
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
@@ -110,13 +95,13 @@ class AdminController extends AbstractController
             return $this->redirectToRoute('app_admin');
         }
 
-        $role = $requestedRole === 'ROLE_USER' ? ['ROLE_USER'] : ['ROLE_USER', 'ROLE_ADMIN'];
-
         // Create the new user
         $user = new User();
         $user->setEmail($email);
-        $user->setRoles($role);
+        $user->setAdmin($isAdmin);
         $user->setUsername($username);
+        $user->setFirstname($firstname);
+        $user->setLastname($lastname);
         $user->setPassword(md5($password));
 
         $userRepository->save($user, true);

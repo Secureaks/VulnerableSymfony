@@ -9,9 +9,17 @@
 
         <ul>
             <li>Username: {{ user.username }}</li>
+            <li>First name: {{ user.firstName }}</li>
+            <li>Last name: {{ user.lastName }}</li>
             <li>Email: {{ user.email }}</li>
-            <li>Roles: {{ 'ROLE_ADMIN' in user.roles ? 'Admin' : 'User' }}</li>
+            <li>Is Admin: {{ 'ROLE_ADMIN' in user.roles ? 'Yes' : 'No' }}</li>
         </ul>
+
+        <div>
+            <form action="{{ path('app_user_edit_form') }}" method="get">
+                <button type="submit">Edit</button>
+            </form>
+        </div>
 
         <div>
             <h3>Change about me</h3>

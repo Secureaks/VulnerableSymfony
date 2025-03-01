@@ -39,6 +39,13 @@ class CommentRepository extends ServiceEntityRepository
             $this->getEntityManager()->flush();
         }
     }
+    public function total(): int
+    {
+        return $this->createQueryBuilder("c")
+            ->select("COUNT(c.id)")
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 
     public function findByPostOrdered(int $postId): array
     {
