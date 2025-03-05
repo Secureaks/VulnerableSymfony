@@ -43,6 +43,14 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         }
     }
 
+    public function total(): int
+    {
+        return $this->createQueryBuilder("u")
+            ->select("COUNT(u.id)")
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     /**
      * Used to upgrade (rehash) the user's password automatically over time.
      */

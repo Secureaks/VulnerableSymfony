@@ -14,16 +14,20 @@
             <form method="post" action="{{ path('app_admin_create') }}">
                 <label for="username">Username:</label>
                 <input id="username" type="text" name="username" required/>
+                <label for="firstName">First name:</label>
+                <input id="firstName" type="text" name="firstName" required/>
+                <label for="lastName">Last name:</label>
+                <input id="lastName" type="text" name="lastName" required/>
                 <label for="email">Email:</label>
                 <input id="email" type="email" name="email" required/>
                 <label for="password">Password:</label>
                 <input id="password" type="password" name="password" required/>
                 <label for="role"></label>
                     <select id="role" name="role">
-                        <option value="ROLE_USER">
+                        <option value="0">
                             User
                         </option>
-                        <option value="ROLE_ADMIN">
+                        <option value="1">
                             Admin
                         </option>
                     </select>
@@ -42,10 +46,10 @@
                     <form action="{{ path('app_admin_role', { 'user': user.id }) }}" method="post">
                         <label>
                             <select name="role">
-                                <option {{ 'ROLE_ADMIN' not in user.roles ? 'selected' : '' }} value="ROLE_USER">
+                                <option {{ 'ROLE_ADMIN' not in user.roles ? 'selected' : '' }} value="0">
                                     User
                                 </option>
-                                <option {{ 'ROLE_ADMIN' in user.roles ? 'selected' : '' }} value="ROLE_ADMIN">
+                                <option {{ 'ROLE_ADMIN' in user.roles ? 'selected' : '' }} value="1">
                                     Admin
                                 </option>
                             </select>

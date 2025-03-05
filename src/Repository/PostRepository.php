@@ -40,6 +40,14 @@ class PostRepository extends ServiceEntityRepository
         }
     }
 
+    public function total(): int
+    {
+        return $this->createQueryBuilder("p")
+            ->select("COUNT(p.id)")
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     public function findAllOrdered(): array
     {
         return $this->createQueryBuilder('p')

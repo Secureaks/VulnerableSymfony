@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}User{% endblock %}
+
+{% block body %}
+
+    <div class="example-wrapper">
+        <h2>Profile edition</h2>
+
+        <div>
+            <h3>Edit your personnel information</h3>
+            <form method="post" action="{{ path('app_user_edit') }}">
+                <label for="firstname">Firstname</label>
+                <input type="text" id="firstname" name="firstname" required value="{{ user.firstname }}"/>
+                <label for="lastname">Lastname</label>
+                <input type="text" id="lastname" name="lastname" required value="{{ user.lastname }}"/>
+                <button type="submit">Edit</button>
+            </form>
+        </div>
+
+        {% include 'commons/messages.html.twig' %}
+
+    </div>
+
+{% endblock %}
