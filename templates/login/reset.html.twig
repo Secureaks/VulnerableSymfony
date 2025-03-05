@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Login{% endblock %}
+
+{% block body %}
+
+    <form class="login" action="{{ path('app_reset') }}" method="post">
+        <h4>
+            Please enter your email address to ask for a password reset link.
+        </h4>
+        <label>
+            <input name="email[]" type="text" placeholder="Email">
+        </label>
+        <button type="submit">Reset</button>
+    </form>
+
+    {% include 'commons/messages.html.twig' %}
+
+{% endblock %}

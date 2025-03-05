@@ -34,6 +34,10 @@ services:
         arguments:
             $trackingEnabled: '%env(bool:TRACKING_ENABLED)%'
 
+    App\Services\Mail:
+        arguments:
+            $sender: '%env(MAILER_SENDER)%'
+
     App\Twig\TemplateFromStringExtension:
         tags:
             - { name: twig.extension }

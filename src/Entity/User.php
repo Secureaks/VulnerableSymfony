@@ -47,6 +47,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private bool $isAdmin = false;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $reset = null;
+
     /**
      * #VULNERABILITY: Intended vulnerable request (Mass Assignment)
      */
@@ -207,6 +210,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setAdmin(bool $isAdmin): static
     {
         $this->isAdmin = $isAdmin;
+
+        return $this;
+    }
+
+    public function getReset(): ?string
+    {
+        return $this->reset;
+    }
+
+    public function setReset(?string $reset): static
+    {
+        $this->reset = $reset;
 
         return $this;
     }

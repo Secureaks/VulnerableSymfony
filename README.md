@@ -87,6 +87,26 @@ Or:
 php -S 0.0.0.0:8000 -t public
 ```
 
+### Emails
+
+If you want to try the password reset feature, you will need to configure the email sending. You need to uncomment 
+the `MAILER_DSN` and `MAILER_SENDER` environment variables in the `.env.local` file, and set them up with your own values,
+such as below:
+
+```yaml
+MAILER_DSN=smtps://user%40example.com:"password"@smtp.example.com:465
+MAILER_SENDER=user@example.com
+```
+
+Then, you need to run the following command for the email to be sent:
+
+```bash
+php bin/console messenger:consume async
+```
+
+> [!WARNING]  
+> This feature is not set up in the docker image, so if you want to test it, you will need to run the project manually.
+
 ## List of vulnerabilities
 
 You can find below the list of vulnerabilities available in the application. The source code is also documented to allow
@@ -111,6 +131,7 @@ you to understand how the vulnerabilities are implemented.
 - Technical information disclosure on `/info.php`
 - Directory listing if using the option `Options +Indexes` on the vhost configuration
 - Mass assignment on `/user/edit/` leading to privilege escalation
+- Mass assignment on `/reset` leading to account takeover (needs mail configuration to be set up)
 
 ## Credits
 
