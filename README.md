@@ -107,6 +107,22 @@ php bin/console messenger:consume async
 > [!WARNING]  
 > This feature is not set up in the docker image, so if you want to test it, you will need to run the project manually.
 
+### Privilege escalation
+
+The privilege escalation through the cron job is set up in the Docker image. If you want to enable it in your local
+environment, you will need to set up the cron job manually. You can do this by adding the following line to your 
+`/etc/crontab` file:
+
+```bash
+*  *    * * *   root    cd /app && bash bin/script
+```
+
+Then make sure the `bin/console` file is owned by `www-data` (but the script itself should not be owned by `root`):
+
+```bash
+chown www-data:www-data bin/console
+```
+
 ## List of vulnerabilities
 
 You can find below the list of vulnerabilities available in the application. The source code is also documented to allow
@@ -132,6 +148,7 @@ you to understand how the vulnerabilities are implemented.
 - Directory listing if using the option `Options +Indexes` on the vhost configuration
 - Mass assignment on `/user/edit/` leading to privilege escalation
 - Mass assignment on `/reset` leading to account takeover (needs mail configuration to be set up)
+- Privilege escalation through a cron job
 
 ## Credits
 

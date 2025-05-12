@@ -74,7 +74,7 @@ class LocalController extends AbstractController
             return new Response('Access denied', Response::HTTP_FORBIDDEN);
         }
 
-        $user->setRoles(['ROLE_USER', 'ROLE_ADMIN']);
+        $user->setAdmin(true);
         $entityManager->persist($user);
         $entityManager->flush();
 

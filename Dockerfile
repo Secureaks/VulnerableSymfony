@@ -7,7 +7,7 @@ WORKDIR /app
 RUN apt-get update -qq
 ARG DEBIAN_FRONTEND=noninteractive
 ENV TZ=Etc/UTC
-RUN apt-get install -y tzdata
+RUN apt-get install -y tzdata cron
 RUN apt-get install -y apache2 libapache2-mod-php php composer curl git unzip mysql-server mysql-client
 RUN apt-get install -y php-xml php-intl php-curl php-mbstring php-mysql php-sqlite3 php-zip php-gd php-imagick
 RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
@@ -43,6 +43,13 @@ RUN service mysql start &&  \
 RUN chown www-data:www-data /app/var -R
 RUN mkdir /app/public/uploads/avatars -p
 RUN chown www-data:www-data /app/public/uploads -R
+RUN chmod +x /app/bin/script
+RUN chown www-data:www-data /app/bin/console
+
+# Cron Job
+RUN echo "*  *    * * *   root    cd /app && bash bin/script" > /etc/cron.d/app
+RUN chmod 0644 /etc/cron.d/app
+RUN crontab /etc/cron.d/app
 
 # Set entrypoint
 COPY docker/entrypoint.sh /entrypoint.sh
