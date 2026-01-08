@@ -15,7 +15,7 @@ vulnerabilities is available below in the [List of vulnerabilities](#list-of-vul
 The easiest way to deploy the application is to use the public Docker image.
 
 ```bash
-docker run -d --name VulenrableSymfony -p 8000:80 secureaks/vulnerablesymfony:latest
+docker run -d --name VulnerableSymfony -p 8000:80 secureaks/vulnerablesymfony:latest
 ```
 
 The application will be available at [http://localhost:8000](http://localhost:8000).
