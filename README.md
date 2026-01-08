@@ -156,7 +156,7 @@ This project is provided by [Secureaks](https://secureaks.com).
 
 ## Contributing
 
-If you want to contribute to this project, fill free to open an issue or a pull request with your changes.
+If you want to contribute to this project, feel free to open an issue or a pull request with your changes.
 
 ## License
 
