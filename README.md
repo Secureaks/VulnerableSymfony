@@ -150,6 +150,45 @@ you to understand how the vulnerabilities are implemented.
 - Mass assignment on `/reset` leading to account takeover (needs mail configuration to be set up)
 - Privilege escalation through a cron job
 
+### API / JWT Vulnerabilities (CTF Challenge)
+
+The application includes a vulnerable REST API with JWT authentication at `/api/*`. Your goal is to find **4 flags** by exploiting JWT vulnerabilities.
+
+#### Challenge objectives
+
+| Flag | Vulnerability | Hint |
+|------|---------------|------|
+| Flag 1 | Algorithm confusion | What happens if you change the `alg` field in the JWT header? |
+| Flag 2 | Weak secret | The signing secret might be in common wordlists... |
+| Flag 3 | Expiration bypass | Does the server really check the `exp` claim? |
+| Flag 4 | Privilege escalation | Can you promote yourself to admin? |
+
+#### API Endpoints
+
+| Endpoint | Method | Description |
+|----------|--------|-------------|
+| `/api/login` | POST | Authenticate and get JWT token |
+| `/api/profile` | GET | Get user profile (requires JWT) |
+| `/api/users` | GET | List all users (admin only) - **Contains Flag 1 & 2** |
+| `/api/secret` | GET | Secret endpoint - **Contains Flag 3** |
+| `/api/admin/promote/{user}` | POST | Promote user to admin - **Contains Flag 4** |
+
+#### Getting started
+
+1. Create an account on `/register`
+2. Get a JWT token via `POST /api/login` with JSON body: `{"email":"...","password":"..."}`
+3. Analyze your token on [jwt.io](https://jwt.io)
+4. Try to access `/api/users` - you need admin privileges...
+5. Find a way to forge a valid admin token!
+
+#### Tools
+
+- [jwt.io](https://jwt.io) - Decode and encode JWT tokens
+- [hashcat](https://hashcat.net) - Crack JWT secrets (mode 16500)
+- [jwt_tool](https://github.com/ticarpi/jwt_tool) - JWT penetration testing toolkit
+
+Good luck!
+
 ## Credits
 
 This project is provided by [Secureaks](https://secureaks.com).

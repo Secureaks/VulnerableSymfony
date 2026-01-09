@@ -15,6 +15,11 @@ security:
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
+        # API firewall for JWT authentication (stateless)
+        api:
+            pattern: ^/api
+            stateless: true
+            lazy: true
         main:
             lazy: true
             provider: app_user_provider
@@ -32,6 +37,8 @@ security:
     # Easy way to control access for large sections of your site
     # Note: Only the *first* access control that matches will be used
     access_control:
+    # API endpoints - intentionally permissive for JWT vulnerability testing
+    - { path: ^/api, roles: PUBLIC_ACCESS }
     - { path: ^/admin, roles: ROLE_ADMIN }
     - { path: ^/user, roles: ROLE_USER }
 
